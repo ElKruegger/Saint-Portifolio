@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kruegger — Full Stack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blood:     #8B0000;
+      --crimson:   #C0392B;
+      --gold:      #C9A84C;
+      --gold-dim:  #7A6030;
+      --black:     #000000;
+      --near-black:#0A0A0A;
+      --charcoal:  #111111;
+      --ash:       #1A1A1A;
+      --bone:      #E8E0D0;
+      --mist:      #9A9A9A;
+      --white:     #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--bone);
+      font-family: 'Crimson Text', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===================== NOISE TEXTURE OVERLAY ===================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ===================== TYPOGRAPHY ===================== */
+    .font-black  { font-family: 'UnifrakturMaguntia', cursive; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-fell   { font-family: 'IM Fell English', serif; }
+
+    h1, h2, h3 { line-height: 1.2; }
+
+    /* ===================== SCROLLBAR ===================== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--blood); }
+
+    /* ===================== SECTION WRAPPER ===================== */
+    .section {
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ===================== HEADER / HERO ===================== */
+    #hero {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      background-color: var(--black);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Scattered text overlay background — like o álbum */
+    #hero::before {
+      content: 'KNOWLEDGE · SORCERY · REINCARNATION · WINGED GARGOYLES · MALFORMATION · TERROR TO THE LIVING · QUINTESSENCE OF SECRET DOCTRINES · BOW DOWN AS YE ENTER HIS KINGDOMS · BOTTOMLESS · UNBOUND · A REALITY BEYOND REALITY · AN INFINITY BEYOND INFINITY · A TRUTH BEYOND TRUTH · FORGOTTEN ONES · STRIVING HARD GRIM RETALIATION · ATROCIOUS RAYS · GUARDIANS AT THE GATE OF TIME · ASCEND & SACRIFICE · CREATURES IMPALED ON THE HORNS OF DEATH · FACELESS MATTES · DEPTHS · DUNGEONS OF MADNESS · I WILL SUCCEED · MORBID WAYS · DUNGEON FIELDS · NIGHTFALL · FULLMOON SHYNE · KULT OF FEAR · SPELL OF SIN · SHADOW WINGS · BLACK MAGICK RITE';
+      position: absolute;
+      top: 0; left: 0;
+      width: 55%;
+      height: 100%;
+      font-family: 'Crimson Text', serif;
+      font-size: 11px;
+      line-height: 1.9;
+      color: rgba(0,0,0,0.55);
+      padding: 20px;
+      word-break: break-word;
+      pointer-events: none;
+      letter-spacing: 0.03em;
+    }
+
+    #hero::after {
+      content: 'FULL STACK DEVELOPER · C# · NET · REACT · TYPESCRIPT · POSTGRESQL · SUPABASE · GITHUB ACTIONS · DOCKER · AZURE · AWS · RENDER · VERCEL · ELASTIC SEARCH · MONGODB · IIS · ZUSTAND · TAILWIND · ASPNET CORE · SQL SERVER · KRUEGGER · DEV · SINNER · BUILDER · BACKEND · FRONTEND · DATABASE · CLOUD · CI/CD · DEPLOY · COMMIT · PUSH · PULL REQUEST · CODE REVIEW · ARCHITECTURE · CLEAN CODE · SOLID · REST API · MICROSERVICES · FULL STACK DEVELOPER · C# · NET · REACT · TYPESCRIPT';
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%;
+      height: 100%;
+      font-family: 'Crimson Text', serif;
+      font-size: 11px;
+      line-height: 1.9;
+      color: rgba(0,0,0,0.45);
+      padding: 20px;
+      word-break: break-word;
+      pointer-events: none;
+      letter-spacing: 0.03em;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .hero-center {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .hero-portrait-wrap {
+      position: relative;
+      width: 481px;
+      height: 282px;
+    }
+
+    .hero-portrait {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: var(--charcoal) url('https://github.com/ElKruegger.png') center/cover;
+      border: 3px solid var(--black);
+      overflow: hidden;
+      box-shadow: 0 0 0 2px var(--black), 0 0 40px rgba(0,0,0,0.8);
+      filter: grayscale(1) contrast(1.2);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .hero-arc-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-arc-svg text {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 38px;
+      fill: var(--white);
+      letter-spacing: 0.05em;
+      filter: drop-shadow(2px 2px 0 var(--black)) drop-shadow(0 0 10px rgba(0,0,0,0.9));
+    }
+
+    /* ===================== BLACK BAND ===================== */
+    .black-band {
+      background: var(--black);
+      height: 80px;
+    }
+
+    /* ===================== ABOUT ===================== */
+    #about {
+      background: var(--black);
+    }
+
+    .about-inner {
+      display: block;
+    }
+
+    .about-divider {
+      width: 100%;
+      height: 320px;
+      position: relative;
+      background: url('SaintImages/creation-hands.png.jpg') center/cover no-repeat;
+    }
+
+    .about-divider::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--black) 0%, transparent 18%, transparent 82%, var(--black) 100%);
+    }
+
+    .about-text h2 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 42px;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .about-text p {
+      font-family: 'Crimson Text', serif;
+      font-size: 18px;
+      color: var(--bone);
+      line-height: 1.8;
+    }
+
+    .praying-hands {
+      width: 150px;
+      height: 150px;
+      float: right;
+      margin: 0 -30px 24px 32px;
+      opacity: 0.7;
+      filter: invert(1);
+    }
+
+    /* ===================== SKILLS ===================== */
+    #skills {
+      background: var(--charcoal);
+    }
+
+    .skills-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .skills-header h2 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 52px;
+      color: var(--white);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas:
+        "a center c"
+        "b center d";
+      gap: 48px 40px;
+      align-items: start;
+    }
+
+    .skills-center-medallion {
+      grid-area: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+    }
+
+    .skill-card:nth-of-type(1) { grid-area: a; }
+    .skill-card:nth-of-type(2) { grid-area: b; }
+    .skill-card:nth-of-type(3) { grid-area: c; }
+    .skill-card:nth-of-type(4) { grid-area: d; }
+
+    .medallion {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: url('SaintImages/angels-guns.png.jpg') center/cover;
+      border: 2px solid var(--gold-dim);
+      position: relative;
+      box-shadow: 0 0 30px rgba(139,0,0,0.4);
+    }
+
+    .medallion-ring {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .medallion-text-svg {
+      position: absolute;
+      inset: -45px;
+      width: calc(100% + 90px);
+      height: calc(100% + 90px);
+      overflow: visible;
+    }
+
+    .skill-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 28px 32px;
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .skill-card:hover {
+      border-color: var(--gold-dim);
+      background: rgba(139,0,0,0.08);
+      transform: translateY(-3px);
+    }
+
+    .skill-card h3 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 28px;
+      color: var(--white);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .skill-card h3 span.num {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      color: var(--blood);
+      letter-spacing: 0.1em;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      padding: 4px 10px;
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--mist);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    .skill-card:hover .tag {
+      border-color: var(--gold-dim);
+      color: var(--bone);
+    }
+
+    /* ===================== PROJECTS ===================== */
+    #projects {
+      background: var(--black);
+    }
+
+    .projects-header {
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .projects-header h2 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 52px;
+      color: var(--white);
+    }
+
+    .projects-emblem {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: start;
+      padding: 40px 0;
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      transition: padding-left 0.3s;
+    }
+
+    .project-card:hover {
+      padding-left: 12px;
+    }
+
+    .project-card:last-child {
+      border-bottom: none;
+    }
+
+    .project-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--ash);
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      color: var(--gold);
+      flex-shrink: 0;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .project-card:hover .project-icon {
+      background: var(--blood);
+      box-shadow: 0 0 20px rgba(139,0,0,0.5);
+    }
+
+    .project-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      color: var(--white);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .project-info p {
+      color: var(--mist);
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+
+    .project-link {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .project-link:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    /* ===================== LANGUAGES ===================== */
+    #languages {
+      background: var(--charcoal);
+    }
+
+    .languages-inner {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .cross-statue {
+      width: 100%;
+      height: 560px;
+      background: url('SaintImages/cross-statue.png.jpg') center/contain no-repeat;
+      filter: grayscale(1) contrast(1.1);
+      opacity: 0.85;
+    }
+
+    .lang-content h2 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 48px;
+      color: var(--white);
+      margin-bottom: 40px;
+    }
+
+    .lang-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .lang-item {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      border: 1px solid rgba(201,168,76,0.12);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .lang-item:hover {
+      border-color: var(--gold-dim);
+      background: rgba(139,0,0,0.06);
+    }
+
+    .lang-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ash);
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .lang-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: invert(1);
+    }
+
+    .lang-name {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      color: var(--white);
+      letter-spacing: 0.08em;
+    }
+
+    .lang-level {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--white);
+    }
+
+    /* ===================== GITHUB / CONTACT ===================== */
+    #contact {
+      background: var(--black);
+      text-align: center;
+    }
+
+    .contact-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .contact-inner h2 {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 52px;
+      color: var(--white);
+    }
+
+    .contact-verse {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--mist);
+      font-size: 16px;
+      max-width: 500px;
+    }
+
+    .github-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 40px;
+      border: 1px solid var(--gold-dim);
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .github-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--blood);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 0;
+    }
+
+    .github-card:hover::before { transform: scaleX(1); }
+
+    .github-card:hover { border-color: var(--crimson); }
+
+    .github-card > * { position: relative; z-index: 1; }
+
+    .github-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ash);
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .github-icon svg { fill: var(--bone); width: 24px; height: 24px; }
+
+    .github-label {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      color: var(--bone);
+      text-transform: uppercase;
+    }
+
+    .ceiling-fresco {
+      width: 100%;
+      max-width: 720px;
+      height: 120px;
+      background: url('SaintImages/ceiling-fresco.png.jpg') center/cover no-repeat;
+      border-radius: 4px;
+      opacity: 0.7;
+    }
+
+    /* ===================== FINAL EMBLEM ===================== */
+    #final-emblem {
+      background: var(--black);
+      position: relative;
+      height: 240px;
+    }
+
+    .final-circle {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: url('SaintImages/download (22).jpg') center/cover;
+      border: 2px solid var(--gold-dim);
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      padding: 32px 40px;
+      text-align: center;
+      border-top: 1px solid rgba(201,168,76,0.12);
+    }
+
+    footer p {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: rgba(154,154,154,0.4);
+      text-transform: uppercase;
+    }
+
+    /* ===================== FADE IN ===================== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 900px) {
+      .about-inner, .languages-inner { grid-template-columns: 1fr; }
+      .skills-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: "a" "b" "center" "c" "d";
+      }
+      .section { padding: 60px 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero">
+    <div class="hero-center">
+      <div class="hero-portrait-wrap">
+        <div class="hero-portrait"></div>
+        <svg class="hero-arc-svg" viewBox="0 0 480 400" aria-hidden="true">
+          <defs>
+            <path id="hero-circle" d="M 40,300 A 320,320 0 0,0 440,300" />
+          </defs>
+          <text text-anchor="middle">
+            <textPath href="#hero-circle" startOffset="50%">Your Sins Are Forgiven</textPath>
+          </text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="black-band"></div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about">
+    <div class="about-divider"></div>
+    <div class="section">
+      <div class="about-inner fade-in">
+        <div class="about-text">
+          <!-- Praying hands icon — substitua pelo seu arquivo -->
+          <img class="praying-hands" src="SaintImages/praying-hands.png.jpg" alt="" aria-hidden="true" />
+          <h2>Minha História</h2>
+          <!-- Coloque aqui seu texto real -->
+          <p>
+            Desenvolvedor Full Stack com mais de dois anos de experiência profissional, com passagem por
+            projetos em São Paulo e no sul do Brasil. Atuo na interseção entre back-end robusto e front-end
+            bem construído, sempre com foco em código limpo, arquitetura escalável e entregas confiáveis,
+            do planejamento ao deploy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section id="skills">
+    <div class="section">
+      <div class="skills-header fade-in">
+        <h2>Minhas Armas</h2>
+      </div>
+      <div class="skills-grid">
+
+        <!-- Backend -->
+        <div class="skill-card fade-in">
+          <h3><span class="num">I.</span> Backend</h3>
+          <div class="skill-tags">
+            <span class="tag">C#</span>
+            <span class="tag">.NET</span>
+            <span class="tag">ASP.NET Core</span>
+            <span class="tag">REST API</span>
+          </div>
+        </div>
+
+        <!-- Center Medallion -->
+        <div class="skills-center-medallion fade-in">
+          <div class="medallion">
+            <svg class="medallion-text-svg" viewBox="0 0 270 270">
+              <defs>
+                <path id="circle-top" d="M 135,135 m -105,0 a 105,105 0 1,1 210,0" />
+                <path id="circle-bot" d="M 135,135 m -105,0 a 105,105 0 0,0 210,0" />
+              </defs>
+              <text font-family="UnifrakturMaguntia, cursive" font-size="20" fill="#FFFFFF" letter-spacing="4" text-anchor="middle">
+                <textPath href="#circle-top" startOffset="50%">Love Each Other</textPath>
+              </text>
+              <text font-family="UnifrakturMaguntia, cursive" font-size="20" fill="#FFFFFF" letter-spacing="3" text-anchor="middle">
+                <textPath href="#circle-bot" startOffset="50%">Blessed Are The Poor</textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Front End -->
+        <div class="skill-card fade-in">
+          <h3><span class="num">II.</span> Front End</h3>
+          <div class="skill-tags">
+            <span class="tag">React</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">Tailwind CSS</span>
+            <span class="tag">Zustand</span>
+          </div>
+        </div>
+
+        <!-- Banco de Dados -->
+        <div class="skill-card fade-in">
+          <h3><span class="num">III.</span> Banco de Dados</h3>
+          <div class="skill-tags">
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">SQL Server</span>
+            <span class="tag">MongoDB</span>
+            <span class="tag">Elasticsearch</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">Azure</span>
+            <span class="tag">AWS</span>
+          </div>
+        </div>
+
+        <!-- GitHub / Cloud -->
+        <div class="skill-card fade-in">
+          <h3><span class="num">IV.</span> Cloud & CI/CD</h3>
+          <div class="skill-tags">
+            <span class="tag">GitHub Actions</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Vercel</span>
+            <span class="tag">Render</span>
+            <span class="tag">IIS</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section id="projects">
+    <div class="section">
+      <div class="projects-header fade-in">
+        <img class="projects-emblem" src="SaintImages/SaintKg.png" alt="" aria-hidden="true" />
+        <h2>Obras</h2>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-icon">K</div>
+        <div class="project-info">
+          <h3>Klie Móveis</h3>
+          <p>Catálogo digital completo para loja de móveis — filtros, cotação e notificação por email. Stack: React, Supabase, Resend.</p>
+          <a href="https://github.com/ElKruegger" target="_blank" class="project-link">VER NO GITHUB →</a>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-icon">C</div>
+        <div class="project-info">
+          <h3>Contrato.dev <span style="font-size:13px; color: var(--blood); font-family:'Cinzel',serif; letter-spacing:.1em;">— em desenvolvimento</span></h3>
+          <p>SaaS para freelancers: gestão de contratos, milestones de pagamento e documentação. Stack completa .NET + React + Supabase.</p>
+          <a href="https://github.com/ElKruegger" target="_blank" class="project-link">VER NO GITHUB →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== LANGUAGES ===================== -->
+  <section id="languages">
+    <div class="section">
+      <div class="languages-inner fade-in">
+        <div class="cross-statue"></div>
+        <div class="lang-content">
+          <h2>Idiomas</h2>
+          <div class="lang-list">
+
+            <div class="lang-item">
+              <div class="lang-icon">
+                <img src="SaintImages/OracaoIcon.jpg" alt="" aria-hidden="true" />
+              </div>
+              <span class="lang-name">Inglês</span>
+              <span class="lang-level">Conversação</span>
+            </div>
+
+            <div class="lang-item">
+              <div class="lang-icon">
+                <img src="SaintImages/PombaIcon.jpg" alt="" aria-hidden="true" />
+              </div>
+              <span class="lang-name">Espanhol</span>
+              <span class="lang-level">Conversação</span>
+            </div>
+
+            <div class="lang-item">
+              <div class="lang-icon">
+                <img src="SaintImages/CruzIcon.jpg" alt="" aria-hidden="true" />
+              </div>
+              <span class="lang-name">Russo</span>
+              <span class="lang-level">Básico</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT / GITHUB ===================== -->
+  <section id="contact">
+    <div class="section">
+      <div class="contact-inner fade-in">
+        <h2>Encontra-me</h2>
+        <p class="contact-verse">"O que quer que faças, faze de todo o coração."</p>
+        <div class="ceiling-fresco"></div>
+        <a href="https://github.com/ElKruegger" target="_blank" class="github-card">
+          <div class="github-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </div>
+          <span class="github-label">github.com/ElKruegger</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL EMBLEM ===================== -->
+  <section id="final-emblem" class="fade-in">
+    <div class="final-circle"></div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <p>Kruegger · MMXXVI · Thy Kingdom Come</p>
+  </footer>
+
+  <!-- ===================== SCROLL ANIMATIONS ===================== -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
