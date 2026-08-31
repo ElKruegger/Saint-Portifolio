@@ -233,7 +233,8 @@
       grid-template-columns: 1fr auto 1fr;
       grid-template-areas:
         "a center c"
-        "b center d";
+        "b center d"
+        "e e e";
       gap: 48px 40px;
       align-items: start;
     }
@@ -246,10 +247,15 @@
       align-self: center;
     }
 
-    .skill-card:nth-of-type(1) { grid-area: a; }
-    .skill-card:nth-of-type(2) { grid-area: b; }
-    .skill-card:nth-of-type(3) { grid-area: c; }
-    .skill-card:nth-of-type(4) { grid-area: d; }
+    .skill-card[data-area="a"] { grid-area: a; }
+    .skill-card[data-area="b"] { grid-area: b; }
+    .skill-card[data-area="c"] { grid-area: c; }
+    .skill-card[data-area="d"] { grid-area: d; }
+    .skill-card[data-area="e"] {
+      grid-area: e;
+      margin-top: 8px;
+    }
+    .skill-card[data-area="e"] .skill-tags { justify-content: center; }
 
     .medallion {
       width: 180px;
@@ -643,7 +649,7 @@
       .about-inner, .languages-inner { grid-template-columns: 1fr; }
       .skills-grid {
         grid-template-columns: 1fr;
-        grid-template-areas: "a" "b" "center" "c" "d";
+        grid-template-areas: "a" "b" "center" "c" "d" "e";
       }
       .section { padding: 60px 20px; }
     }
@@ -704,13 +710,19 @@
       <div class="skills-grid">
 
         <!-- Backend -->
-        <div class="skill-card fade-in">
+        <div class="skill-card fade-in" data-area="a">
           <h3><span class="num">I.</span> Backend</h3>
           <div class="skill-tags">
             <span class="tag">C#</span>
             <span class="tag">.NET</span>
+            <span class="tag">.NET Core</span>
             <span class="tag">ASP.NET Core</span>
             <span class="tag">REST API</span>
+            <span class="tag">Asynchronous Programming</span>
+            <span class="tag">OAuth2 / JWT</span>
+            <span class="tag">Message Queues</span>
+            <span class="tag">Testing</span>
+            <span class="tag">Assembly</span>
           </div>
         </div>
 
@@ -733,7 +745,7 @@
         </div>
 
         <!-- Front End -->
-        <div class="skill-card fade-in">
+        <div class="skill-card fade-in" data-area="c">
           <h3><span class="num">II.</span> Front End</h3>
           <div class="skill-tags">
             <span class="tag">React</span>
@@ -744,28 +756,39 @@
         </div>
 
         <!-- Banco de Dados -->
-        <div class="skill-card fade-in">
+        <div class="skill-card fade-in" data-area="b">
           <h3><span class="num">III.</span> Banco de Dados</h3>
           <div class="skill-tags">
             <span class="tag">PostgreSQL</span>
+            <span class="tag">MySQL</span>
             <span class="tag">SQL Server</span>
             <span class="tag">MongoDB</span>
             <span class="tag">Elasticsearch</span>
             <span class="tag">Supabase</span>
-            <span class="tag">Azure</span>
-            <span class="tag">AWS</span>
           </div>
         </div>
 
         <!-- GitHub / Cloud -->
-        <div class="skill-card fade-in">
+        <div class="skill-card fade-in" data-area="d">
           <h3><span class="num">IV.</span> Cloud & CI/CD</h3>
           <div class="skill-tags">
+            <span class="tag">AWS</span>
+            <span class="tag">Microsoft Azure</span>
             <span class="tag">GitHub Actions</span>
             <span class="tag">Docker</span>
             <span class="tag">Vercel</span>
             <span class="tag">Render</span>
             <span class="tag">IIS</span>
+          </div>
+        </div>
+
+        <!-- APIs & Integrations -->
+        <div class="skill-card fade-in" data-area="e">
+          <h3><span class="num">V.</span> APIs & Integrations</h3>
+          <div class="skill-tags">
+            <span class="tag">Google Drive API</span>
+            <span class="tag">Microsoft Graph API</span>
+            <span class="tag">OpenAI API</span>
           </div>
         </div>
 
